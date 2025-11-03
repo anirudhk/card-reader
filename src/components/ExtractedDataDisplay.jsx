@@ -33,6 +33,15 @@ function ExtractedDataDisplay({ data }) {
           />
         </Grid>
       ))}
+      {data.ocrMethod && (
+        <Grid item xs={12}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="caption" color="text.secondary">
+              OCR Method: <strong>{data.ocrMethod}</strong>
+            </Typography>
+          </Box>
+        </Grid>
+      )}
       {data.rawText && (
         <Grid item xs={12}>
           <Box sx={{ mt: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>

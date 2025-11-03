@@ -3,7 +3,7 @@ import { Button, Box, Typography, Card, CardMedia } from '@mui/material';
 import { PhotoCamera, CloudUpload } from '@mui/icons-material';
 import { extractCardData } from '../services/ocrService';
 
-function CardScanner({ onDataExtracted, onLoadingChange }) {
+function CardScanner({ onDataExtracted, onLoadingChange, ocrConfig = {} }) {
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const [preview, setPreview] = useState(null);
@@ -28,11 +28,13 @@ function CardScanner({ onDataExtracted, onLoadingChange }) {
     reader.readAsDataURL(file);
 
     try {
-      const extractedData = await extractCardData(file);
+      const extractedData = await extractCardData(file, {
+        visionApiKey: ocrConfig.visionApiKey
+      });
       onDataExtracted(extractedData);
     } catch (error) {
       console.error('Error processing image:', error);
-      alert('Error processing image. Please try again.');
+      alert(`Error processing image: ${error.message}. Please try again.`);
     } finally {
       setProcessing(false);
       onLoadingChange(false);

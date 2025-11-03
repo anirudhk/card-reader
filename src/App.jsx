@@ -24,6 +24,7 @@ import {
 import CardScanner from './components/CardScanner';
 import ExtractedDataDisplay from './components/ExtractedDataDisplay';
 import SheetsConfig from './components/SheetsConfig';
+import OcrConfig from './components/OcrConfig';
 
 function App() {
   const [extractedData, setExtractedData] = useState(null);
@@ -34,6 +35,9 @@ function App() {
     spreadsheetId: '',
     credentials: null,
     accessToken: null
+  });
+  const [ocrConfig, setOcrConfig] = useState({
+    visionApiKey: localStorage.getItem('visionApiKey') || ''
   });
 
   const handleDataExtracted = (data) => {
@@ -116,7 +120,20 @@ function App() {
 
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Grid container spacing={3}>
-          {/* Google Sheets Configuration */}
+          {/* OCR Configuration */}
+          <Grid item xs={12}>
+            <Paper elevation={2} sx={{ p: 3 }}>
+              <OcrConfig
+                config={ocrConfig}
+                onConfigChange={(config) => {
+                  setOcrConfig(config);
+                  localStorage.setItem('visionApiKey', config.visionApiKey || '');
+                }}
+              />
+            </Paper>
+          </Grid>
+
+          {/* Sheets Configuration */}
           <Grid item xs={12}>
             <Paper elevation={2} sx={{ p: 3 }}>
               <SheetsConfig
@@ -136,6 +153,7 @@ function App() {
                 <CardScanner
                   onDataExtracted={handleDataExtracted}
                   onLoadingChange={setLoading}
+                  ocrConfig={ocrConfig}
                 />
               </CardContent>
             </Card>

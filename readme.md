@@ -18,8 +18,8 @@ A Progressive Web Application (PWA) that intelligently scans business cards, ext
 ## Features
 
 - 📸 **Camera & Image Upload**: Take photos directly from your device or upload existing images
-- 🔍 **OCR (Optical Character Recognition)**: Uses Tesseract.js to extract text from business card images
-- 🤖 **Intelligent Data Extraction**: Automatically identifies and extracts:
+- 🤖 **AI-Powered OCR**: Choose between Google Cloud Vision API (95%+ accuracy) or offline Tesseract.js
+- 🎯 **Intelligent Data Extraction**: Automatically identifies and extracts:
   - Name
   - Email address
   - Phone number
@@ -38,16 +38,15 @@ A Progressive Web Application (PWA) that intelligently scans business cards, ext
 - **Frontend**: React 18
 - **Build Tool**: Vite
 - **UI Framework**: Material-UI (MUI)
-- **OCR Engine**: Tesseract.js
+- **OCR Engines**: Google Cloud Vision API (AI-powered, recommended) + Tesseract.js (offline fallback)
 - **Sheets APIs**: Google Sheets API v4, Zoho Sheets API v2
 - **PWA**: Vite PWA Plugin
 
 ## Prerequisites
 
 - Node.js 16+ and npm/yarn
-- Google Cloud Project with Google Sheets API enabled
-- Google Service Account credentials (JSON file)
-- A Google Spreadsheet (shared with the service account)
+- **(Optional but Recommended)** Google Cloud Vision API key for better OCR accuracy (first 1,000 requests/month free)
+- Google Sheets API setup OR Zoho Sheets API setup (see below)
 
 ## Installation
 
@@ -61,7 +60,22 @@ A Progressive Web Application (PWA) that intelligently scans business cards, ext
    npm install
    ```
 
-3. **Set up Google Sheets (Optional - if using Google Sheets)**:
+3. **(Optional but Recommended) Set up Google Cloud Vision API for Better OCR**:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select an existing one
+   - Enable the **Cloud Vision API**:
+     - Go to "APIs & Services" > "Library"
+     - Search for "Cloud Vision API"
+     - Click "Enable"
+   - Create an API Key:
+     - Go to "APIs & Services" > "Credentials"
+     - Click "Create Credentials" > "API Key"
+     - Copy the API key
+     - (Optional) Click "Restrict Key" to limit it to Vision API for security
+   - Enter the API key in the app's OCR Configuration section
+   - **Free Tier:** First 1,000 requests/month are free!
+
+4. **Set up Google Sheets (Optional - if using Google Sheets)**:
    - Go to [Google Cloud Console](https://console.cloud.google.com/)
    - Create a new project or select an existing one
    - Enable the **Google Sheets API**
@@ -79,7 +93,7 @@ A Progressive Web Application (PWA) that intelligently scans business cards, ext
 
    **OR**
 
-3. **Set up Zoho Sheets (Optional - if using Zoho Sheets)**:
+4. **Set up Zoho Sheets (Optional - if using Zoho Sheets)**:
    - Go to [Zoho API Console](https://api-console.zoho.com/)
    - Create a new application or select an existing one
    - Generate OAuth credentials:
@@ -112,7 +126,14 @@ A Progressive Web Application (PWA) that intelligently scans business cards, ext
 
 ## How to Use the App
 
-1. **Configure Sheets**:
+1. **Configure OCR (Optional but Recommended)**:
+   - Open the app in your browser
+   - In the "OCR Configuration" section, choose:
+     - **AI-Powered (Google Vision)**: Enter your Google Vision API key for 95%+ accuracy
+     - **Offline (Tesseract)**: Works without API key but with ~70-80% accuracy
+   - If using Google Vision API, paste your API key and it will be saved locally
+
+2. **Configure Sheets**:
    - Open the app in your browser
    - Select either "Google Sheets" or "Zoho Sheets" tab
    - **For Google Sheets**:
@@ -122,17 +143,20 @@ A Progressive Web Application (PWA) that intelligently scans business cards, ext
      - Enter your Zoho Workbook ID
      - Enter your OAuth Access Token
 
-2. **Scan a Business Card**:
+3. **Scan a Business Card**:
    - Click "Take Photo" to use your device camera
    - Or click "Upload Image" to select an image file
-   - Wait for the OCR processing to complete (usually 5-15 seconds)
+   - Wait for the OCR processing to complete:
+     - **With Google Vision API:** 1-2 seconds
+     - **With Tesseract (offline):** 5-15 seconds
 
-3. **Review Extracted Data**:
+4. **Review Extracted Data**:
    - The app will display all extracted information
+   - Check which OCR method was used (shown below the extracted data)
    - Review and verify the data accuracy
    - Edit if necessary (future feature)
 
-4. **Save to Sheets**:
+5. **Save to Sheets**:
    - Click "Save to Google Sheets" or "Save to Zoho Sheets" (depending on your selection)
    - The app will intelligently map the data to existing columns or create new ones
    - You'll receive a confirmation message when successful
